@@ -91,6 +91,16 @@ class ViewController: UIViewController, AVCapturePhotoCaptureDelegate {
             make.bottom.equalToSuperview().offset(-20)
             make.left.equalToSuperview().offset(40)
         }
+        flashButton.rx.tap.subscribe(onNext: { [weak self] () in
+            guard let self = self else { return }
+            if self.flashMode == .on {
+                self.flashMode = .off
+                self.flashButton.setImage(UIImage(named: "flash_off"), for: .normal)
+            } else if self.flashMode == .off {
+                self.flashMode = .on
+                self.flashButton.setImage(UIImage(named: "flash_on"), for: .normal)
+            }
+        }).disposed(by: self.disposeBag)
     }
 
     func setupBottomView() {
@@ -111,7 +121,7 @@ class ViewController: UIViewController, AVCapturePhotoCaptureDelegate {
             guard let self = self else { return }
             // TODO: 拍照功能
             let settings = AVCapturePhotoSettings()
-            settings.flashMode = .off
+            settings.flashMode = self.flashMode
             self.photoOutput.capturePhoto(with: settings, delegate: self)
         }).disposed(by: self.disposeBag)
 
