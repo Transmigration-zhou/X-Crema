@@ -174,7 +174,7 @@ class ViewController: UIViewController, AVCapturePhotoCaptureDelegate {
 
     func startCamera() {
         let cameras = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .unspecified).devices.compactMap { $0 }
-        
+
         for camera in cameras {
             if camera.position == .back {
                 self.backCamera = camera
