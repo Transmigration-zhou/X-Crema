@@ -31,6 +31,8 @@ class ViewController: UIViewController, AVCapturePhotoCaptureDelegate {
 
     let photoOutput = AVCapturePhotoOutput()
 
+    var flashMode = AVCaptureDevice.FlashMode.off
+
     private let headerView: UIView = {
         let view = UIView()
         view.backgroundColor = .black
@@ -45,19 +47,19 @@ class ViewController: UIViewController, AVCapturePhotoCaptureDelegate {
 
     private let flashButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "cameraLight"), for: .normal)
+        button.setImage(UIImage(named: "flash_off"), for: .normal)
         return button
     }()
 
-    private let cameraButton: UIButton = {
+    private let captureButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "capture"), for: .normal)
         return button
     }()
 
-    private let switchButton: UIButton = {
+    private let toggleCameraButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "switchCamera"), for: .normal)
+        button.setImage(UIImage(named: "toggleCamera"), for: .normal)
         return button
     }()
 
@@ -99,13 +101,13 @@ class ViewController: UIViewController, AVCapturePhotoCaptureDelegate {
             make.left.right.equalToSuperview()
         }
 
-        bottomView.addSubview(cameraButton)
-        cameraButton.snp.makeConstraints { make in
+        bottomView.addSubview(captureButton)
+        captureButton.snp.makeConstraints { make in
             make.width.height.equalTo(68)
             make.top.equalToSuperview().offset(20)
             make.centerX.equalToSuperview()
         }
-        cameraButton.rx.tap.subscribe(onNext: { [weak self] () in
+        captureButton.rx.tap.subscribe(onNext: { [weak self] () in
             guard let self = self else { return }
             // TODO: 拍照功能
             let settings = AVCapturePhotoSettings()
@@ -113,14 +115,14 @@ class ViewController: UIViewController, AVCapturePhotoCaptureDelegate {
             self.photoOutput.capturePhoto(with: settings, delegate: self)
         }).disposed(by: self.disposeBag)
 
-        self.bottomView.addSubview(switchButton)
-        switchButton.snp.makeConstraints { make in
+        self.bottomView.addSubview(toggleCameraButton)
+        toggleCameraButton.snp.makeConstraints { make in
             make.width.equalTo(30)
             make.height.equalTo(23)
-            make.centerY.equalTo(cameraButton)
+            make.centerY.equalTo(captureButton)
             make.right.equalToSuperview().offset(-60)
         }
-        switchButton.rx.tap.subscribe(onNext: { [weak self] () in
+        toggleCameraButton.rx.tap.subscribe(onNext: { [weak self] () in
             guard let self = self,
                   let currentCameraPosition = self.currentCameraPosition,
                   self.session.isRunning else { return }
