@@ -1,0 +1,6 @@
+framework module Pods_XCrema_XCremaUITests {
+  umbrella header "Pods-XCrema-XCremaUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
