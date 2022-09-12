@@ -51,7 +51,7 @@ class ViewController: UIViewController, AVCapturePhotoCaptureDelegate {
 
     private let cameraButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "photograph"), for: .normal)
+        button.setImage(UIImage(named: "capture"), for: .normal)
         return button
     }()
 
