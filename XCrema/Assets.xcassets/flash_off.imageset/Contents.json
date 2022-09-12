@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "flash_off.png",
+      "filename" : "flash_on.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
