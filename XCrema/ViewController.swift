@@ -43,6 +43,24 @@ class ViewController: UIViewController, AVCapturePhotoCaptureDelegate {
         return view
     }()
 
+    private let flashButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "cameraLight"), for: .normal)
+        return button
+    }()
+
+    private let cameraButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "photograph"), for: .normal)
+        return button
+    }()
+
+    private let switchButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "switchCamera"), for: .normal)
+        return button
+    }()
+
     override var shouldAutorotate: Bool {
         return false
     }
@@ -63,6 +81,14 @@ class ViewController: UIViewController, AVCapturePhotoCaptureDelegate {
             make.height.equalTo(100)
             make.left.right.equalToSuperview()
         }
+
+        headerView.addSubview(flashButton)
+        flashButton.snp.makeConstraints { make in
+            make.width.equalTo(13)
+            make.height.equalTo(21)
+            make.bottom.equalToSuperview().offset(-20)
+            make.left.equalToSuperview().offset(40)
+        }
     }
 
     func setupBottomView() {
@@ -73,8 +99,6 @@ class ViewController: UIViewController, AVCapturePhotoCaptureDelegate {
             make.left.right.equalToSuperview()
         }
 
-        let cameraButton = UIButton()
-        cameraButton.setImage(UIImage(named: "photograph"), for: .normal)
         bottomView.addSubview(cameraButton)
         cameraButton.snp.makeConstraints { make in
             make.width.height.equalTo(68)
@@ -89,8 +113,6 @@ class ViewController: UIViewController, AVCapturePhotoCaptureDelegate {
             self.photoOutput.capturePhoto(with: settings, delegate: self)
         }).disposed(by: self.disposeBag)
 
-        let switchButton = UIButton()
-        switchButton.setImage(UIImage(named: "switchCamera"), for: .normal)
         self.bottomView.addSubview(switchButton)
         switchButton.snp.makeConstraints { make in
             make.width.equalTo(30)
