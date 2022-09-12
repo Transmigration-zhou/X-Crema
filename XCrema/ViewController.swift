@@ -41,11 +41,13 @@ class ViewController: UIViewController, AVCapturePhotoCaptureDelegate {
 
     private let headerView: UIView = {
         let view = UIView()
+        view.backgroundColor = .black.withAlphaComponent(0.4)
         return view
     }()
 
     private let bottomView: UIView = {
         let view = UIView()
+        view.backgroundColor = .black.withAlphaComponent(0.4)
         return view
     }()
 
