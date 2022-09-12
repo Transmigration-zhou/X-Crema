@@ -102,7 +102,26 @@ class ViewController: UIViewController, AVCapturePhotoCaptureDelegate {
             guard let self = self,
                   let currentCameraPosition = self.currentCameraPosition,
                   self.session.isRunning else { return }
-            // TODO: 切换摄像头
+            self.session.beginConfiguration()
+            switch currentCameraPosition {
+            case .front:
+                guard let backCamera = self.backCamera else { return }
+                self.backCameraInput = try! AVCaptureDeviceInput(device: backCamera)
+                self.session.removeInput(self.frontCameraInput!)
+                if self.session.canAddInput(self.backCameraInput!) {
+                    self.session.addInput(self.backCameraInput!)
+                }
+                self.currentCameraPosition = .back
+            case .back:
+                guard let frontCamera = self.frontCamera else { return }
+                self.frontCameraInput = try! AVCaptureDeviceInput(device: frontCamera)
+                self.session.removeInput(self.backCameraInput!)
+                if self.session.canAddInput(self.frontCameraInput!) {
+                    self.session.addInput(self.frontCameraInput!)
+                }
+                self.currentCameraPosition = .front
+            }
+            self.session.commitConfiguration()
         }).disposed(by: self.disposeBag)
     }
 
