@@ -10,6 +10,7 @@ import AVFoundation
 import SnapKit
 import RxSwift
 import RxCocoa
+import Photos
 
 class ViewController: UIViewController, AVCapturePhotoCaptureDelegate {
 
@@ -33,15 +34,18 @@ class ViewController: UIViewController, AVCapturePhotoCaptureDelegate {
 
     var flashMode = AVCaptureDevice.FlashMode.off
 
+    private let cameraView: UIView = {
+        let view = UIView()
+        return view
+    }()
+
     private let headerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .black
         return view
     }()
 
     private let bottomView: UIView = {
         let view = UIView()
-        view.backgroundColor = .black
         return view
     }()
 
@@ -159,6 +163,15 @@ class ViewController: UIViewController, AVCapturePhotoCaptureDelegate {
         }).disposed(by: self.disposeBag)
     }
 
+    func setupCameraView() {
+        self.view.addSubview(cameraView)
+        cameraView.snp.makeConstraints { make in
+            make.top.equalTo(headerView.snp.bottom)
+            make.bottom.equalTo(bottomView.snp.top)
+            make.left.right.equalToSuperview()
+        }
+    }
+
     func startCamera() {
         let cameras = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .unspecified).devices.compactMap { $0 }
         
@@ -188,17 +201,21 @@ class ViewController: UIViewController, AVCapturePhotoCaptureDelegate {
             session.addOutput(photoOutput)
         }
         session.startRunning()
-        let videoLayer = AVCaptureVideoPreviewLayer(session: session)
-        videoLayer.videoGravity = .resizeAspectFill
-        videoLayer.frame = self.view.frame
-        self.view.layer.masksToBounds = true
-        self.view.layer.addSublayer(videoLayer)
+        let previewLayer = AVCaptureVideoPreviewLayer(session: session)
+        previewLayer.videoGravity = .resizeAspectFill
+        previewLayer.frame = self.view.frame
+        self.view.layer.addSublayer(previewLayer)
     }
 
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-        guard error == nil else { return }
-        guard let imageData = photo.fileDataRepresentation() else { return }
-        // TODO: 保存图片
+        if let error = error {
+            print("error: \(error)")
+        }
+        guard let imageData = photo.fileDataRepresentation(),
+              let image = UIImage(data: imageData) else { return }
+        try? PHPhotoLibrary.shared().performChangesAndWait {
+            PHAssetChangeRequest.creationRequestForAsset(from: image)
+        }
     }
 }
 
