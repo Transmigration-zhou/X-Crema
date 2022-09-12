@@ -123,7 +123,6 @@ class ViewController: UIViewController, AVCapturePhotoCaptureDelegate {
         }
         captureButton.rx.tap.subscribe(onNext: { [weak self] () in
             guard let self = self else { return }
-            // TODO: 拍照功能
             let settings = AVCapturePhotoSettings()
             settings.flashMode = self.flashMode
             self.photoOutput.capturePhoto(with: settings, delegate: self)
