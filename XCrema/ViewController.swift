@@ -34,11 +34,6 @@ class ViewController: UIViewController, AVCapturePhotoCaptureDelegate {
 
     var flashMode = AVCaptureDevice.FlashMode.off
 
-    private let cameraView: UIView = {
-        let view = UIView()
-        return view
-    }()
-
     private let headerView: UIView = {
         let view = UIView()
         view.backgroundColor = .black.withAlphaComponent(0.4)
@@ -48,6 +43,15 @@ class ViewController: UIViewController, AVCapturePhotoCaptureDelegate {
     private let bottomView: UIView = {
         let view = UIView()
         view.backgroundColor = .black.withAlphaComponent(0.4)
+        return view
+    }()
+
+    private let focusView: UIView = {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
+        view.layer.borderWidth = 1.0
+        view.layer.borderColor = UIColor.green.cgColor
+        view.backgroundColor = .clear
+        view.isHidden = true
         return view
     }()
 
@@ -80,6 +84,7 @@ class ViewController: UIViewController, AVCapturePhotoCaptureDelegate {
         self.startCamera()
         self.setupHeaderView()
         self.setupBottomView()
+        self.addTapGesture()
     }
 
     func setupHeaderView() {
@@ -164,15 +169,6 @@ class ViewController: UIViewController, AVCapturePhotoCaptureDelegate {
         }).disposed(by: self.disposeBag)
     }
 
-    func setupCameraView() {
-        self.view.addSubview(cameraView)
-        cameraView.snp.makeConstraints { make in
-            make.top.equalTo(headerView.snp.bottom)
-            make.bottom.equalTo(bottomView.snp.top)
-            make.left.right.equalToSuperview()
-        }
-    }
-
     func startCamera() {
         let cameras = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .unspecified).devices.compactMap { $0 }
 
@@ -206,6 +202,52 @@ class ViewController: UIViewController, AVCapturePhotoCaptureDelegate {
         previewLayer.videoGravity = .resizeAspectFill
         previewLayer.frame = self.view.frame
         self.view.layer.addSublayer(previewLayer)
+    }
+
+    func addTapGesture() {
+        // 点击屏幕对焦
+        self.view.addSubview(focusView)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(focusGesture(_:)))
+        self.view.addGestureRecognizer(tap)
+    }
+
+    @objc
+    private func focusGesture(_ gesture: UITapGestureRecognizer) {
+        let point = gesture.location(in: gesture.view)
+        focusAtPoint(point: point)
+    }
+
+    private func focusAtPoint(point: CGPoint) {
+        let size = self.view.bounds.size
+        let focusPoint = CGPoint(x: point.y / size.height, y: 1 - point.x / size.width)
+        guard let currentCameraPosition = self.currentCameraPosition else { return }
+        let currentCamera = currentCameraPosition == .back ? backCamera : frontCamera
+        guard let captureDevice = currentCamera else { return }
+        do {
+            try captureDevice.lockForConfiguration()
+            if captureDevice.isFocusModeSupported(.autoFocus) {
+                captureDevice.focusPointOfInterest = focusPoint
+                captureDevice.focusMode = .autoFocus
+            }
+            if captureDevice.isExposureModeSupported(.autoExpose) {
+                captureDevice.exposurePointOfInterest = focusPoint
+                captureDevice.exposureMode = .autoExpose
+            }
+            captureDevice.unlockForConfiguration()
+        } catch {
+        }
+
+        self.focusView.center = point
+        self.focusView.isHidden = false
+        UIView.animate(withDuration: 0.3, animations: { [weak self] in
+            self?.focusView.transform = CGAffineTransform(scaleX: 1.25, y: 1.25)
+        }) { [weak self] _ in
+            UIView.animate(withDuration: 0.5, animations: { [weak self] in
+                self?.focusView.transform = CGAffineTransform.identity
+            }) { [weak self] _ in
+                self?.focusView.isHidden = true
+            }
+        }
     }
 
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
