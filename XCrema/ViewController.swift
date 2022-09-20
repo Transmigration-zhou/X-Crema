@@ -12,7 +12,7 @@ import RxSwift
 import RxCocoa
 import Photos
 
-class ViewController: UIViewController, AVCapturePhotoCaptureDelegate {
+class CameraViewController: UIViewController {
 
     enum CameraPosition {
         case back
@@ -168,7 +168,9 @@ class ViewController: UIViewController, AVCapturePhotoCaptureDelegate {
             self.session.commitConfiguration()
         }).disposed(by: self.disposeBag)
     }
+}
 
+extension CameraViewController {
     func startCamera() {
         let cameras = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .unspecified).devices.compactMap { $0 }
 
@@ -249,7 +251,9 @@ class ViewController: UIViewController, AVCapturePhotoCaptureDelegate {
             }
         }
     }
+}
 
+extension CameraViewController: AVCapturePhotoCaptureDelegate {
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         if let error = error {
             print("error: \(error)")
@@ -261,4 +265,3 @@ class ViewController: UIViewController, AVCapturePhotoCaptureDelegate {
         }
     }
 }
-
