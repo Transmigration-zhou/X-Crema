@@ -171,6 +171,7 @@ class CameraViewController: UIViewController {
 }
 
 extension CameraViewController {
+    /// 启动相机
     func startCamera() {
         let cameras = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .unspecified).devices.compactMap { $0 }
 
@@ -206,6 +207,7 @@ extension CameraViewController {
         self.view.layer.addSublayer(previewLayer)
     }
 
+    /// 添加手势
     func addTapGesture() {
         // 点击屏幕对焦
         self.view.addSubview(focusView)
