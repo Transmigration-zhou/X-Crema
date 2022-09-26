@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  PhotoViewController.swift
 //  XCrema
 //
 //  Created by ByteDance on 2022/9/2.
@@ -12,7 +12,7 @@ import RxSwift
 import RxCocoa
 import Photos
 
-class CameraViewController: UIViewController {
+class PhotoViewController: UIViewController {
 
     enum CameraPosition {
         case back
@@ -185,7 +185,7 @@ class CameraViewController: UIViewController {
     }
 }
 
-extension CameraViewController {
+extension PhotoViewController {
     /// 启动相机
     func startCamera() {
         let cameras = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .unspecified).devices.compactMap { $0 }
@@ -300,7 +300,7 @@ extension CameraViewController {
     }
 }
 
-extension CameraViewController: AVCapturePhotoCaptureDelegate {
+extension PhotoViewController: AVCapturePhotoCaptureDelegate {
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         if let error = error {
             print("error: \(error)")
@@ -313,7 +313,7 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
     }
 }
 
-extension CameraViewController: UIGestureRecognizerDelegate {
+extension PhotoViewController: UIGestureRecognizerDelegate {
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if gestureRecognizer is UIPinchGestureRecognizer {
             self.beginGestureScale = self.effectiveScale
