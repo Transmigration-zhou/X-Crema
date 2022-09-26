@@ -30,9 +30,18 @@ class CameraViewController: UIViewController {
     private var frontCameraInput: AVCaptureDeviceInput?
     private var backCameraInput: AVCaptureDeviceInput?
 
+    /// 图像预览层，实时显示捕获的图像
+    var previewLayer: AVCaptureVideoPreviewLayer?
+
+    /// 照片输出流
     let photoOutput = AVCapturePhotoOutput()
 
     var flashMode = AVCaptureDevice.FlashMode.off
+
+    /// 记录开始的缩放比例
+    var beginGestureScale: CGFloat = 1.0
+    /// 最后的缩放比例
+    var effectiveScale: CGFloat = 1.0
 
     private let headerView: UIView = {
         let view = UIView()
@@ -130,6 +139,8 @@ class CameraViewController: UIViewController {
         }
         captureButton.rx.tap.subscribe(onNext: { [weak self] () in
             guard let self = self else { return }
+            let connection = self.photoOutput.connection(with: .video)
+            connection?.videoScaleAndCropFactor = self.effectiveScale
             let settings = AVCapturePhotoSettings()
             settings.flashMode = self.flashMode
             self.photoOutput.capturePhoto(with: settings, delegate: self)
@@ -166,6 +177,10 @@ class CameraViewController: UIViewController {
                 self.currentCameraPosition = .front
             }
             self.session.commitConfiguration()
+            self.effectiveScale = 1.0
+            let connection = self.photoOutput.connection(with: .video)
+            connection?.videoScaleAndCropFactor = self.effectiveScale
+            self.previewLayer?.setAffineTransform(CGAffineTransform(scaleX: self.effectiveScale, y: self.effectiveScale))
         }).disposed(by: self.disposeBag)
     }
 }
@@ -201,10 +216,10 @@ extension CameraViewController {
             session.addOutput(photoOutput)
         }
         session.startRunning()
-        let previewLayer = AVCaptureVideoPreviewLayer(session: session)
-        previewLayer.videoGravity = .resizeAspectFill
-        previewLayer.frame = self.view.frame
-        self.view.layer.addSublayer(previewLayer)
+        previewLayer = AVCaptureVideoPreviewLayer(session: session)
+        previewLayer?.videoGravity = .resizeAspectFill
+        previewLayer?.frame = self.view.frame
+        self.view.layer.addSublayer(previewLayer!)
     }
 
     /// 添加手势
@@ -213,6 +228,9 @@ extension CameraViewController {
         self.view.addSubview(focusView)
         let tap = UITapGestureRecognizer(target: self, action: #selector(focusGesture(_:)))
         self.view.addGestureRecognizer(tap)
+        let pinch = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(_:)))
+        pinch.delegate = self
+        self.view.addGestureRecognizer(pinch)
     }
 
     @objc
@@ -253,6 +271,33 @@ extension CameraViewController {
             }
         }
     }
+
+    @objc
+    func handlePinchGesture(_ recognizer: UIPinchGestureRecognizer) {
+        var allTouchesAreOnThePreviewLayer = true
+        let numTouches = recognizer.numberOfTouches
+        for i in 0..<numTouches {
+            let location = recognizer.location(ofTouch: i, in: self.view)
+            let convertedLocation = previewLayer?.convert(location, from: previewLayer?.superlayer)
+            if !(previewLayer?.contains(convertedLocation!))! {
+                allTouchesAreOnThePreviewLayer = false
+                break
+            }
+        }
+        if allTouchesAreOnThePreviewLayer {
+            self.effectiveScale = self.beginGestureScale * recognizer.scale
+            if self.effectiveScale < 1.0 {
+                self.effectiveScale = 1.0
+            }
+            let maxScaleAndCropFactor = photoOutput.connection(with: .video)?.videoMaxScaleAndCropFactor
+            if self.effectiveScale > maxScaleAndCropFactor! {
+                self.effectiveScale = maxScaleAndCropFactor!
+            }
+            UIView.animate(withDuration: 0.025) {
+                self.previewLayer?.setAffineTransform(CGAffineTransform(scaleX: self.effectiveScale, y: self.effectiveScale))
+            }
+        }
+    }
 }
 
 extension CameraViewController: AVCapturePhotoCaptureDelegate {
@@ -265,5 +310,14 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
         try? PHPhotoLibrary.shared().performChangesAndWait {
             PHAssetChangeRequest.creationRequestForAsset(from: image)
         }
+    }
+}
+
+extension CameraViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer is UIPinchGestureRecognizer {
+            self.beginGestureScale = self.effectiveScale
+        }
+        return true
     }
 }
