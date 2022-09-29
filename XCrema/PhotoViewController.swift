@@ -189,14 +189,8 @@ extension PhotoViewController {
     /// 启动相机
     func startCamera() {
         let cameras = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .unspecified).devices.compactMap { $0 }
-
-        for camera in cameras {
-            if camera.position == .back {
-                self.backCamera = camera
-            } else if camera.position == .front {
-                self.frontCamera = camera
-            }
-        }
+        self.backCamera = cameras.filter({ $0.position == .back }).first
+        self.frontCamera = cameras.filter({ $0.position == .front }).first
         // 默认后置摄像头
         if let backCamera = self.backCamera {
             backCameraInput = try! AVCaptureDeviceInput(device: backCamera)
@@ -245,20 +239,16 @@ extension PhotoViewController {
         guard let currentCameraPosition = self.currentCameraPosition else { return }
         let currentCamera = currentCameraPosition == .back ? backCamera : frontCamera
         guard let captureDevice = currentCamera else { return }
-        do {
-            try captureDevice.lockForConfiguration()
-            if captureDevice.isFocusModeSupported(.autoFocus) {
-                captureDevice.focusPointOfInterest = focusPoint
-                captureDevice.focusMode = .autoFocus
-            }
-            if captureDevice.isExposureModeSupported(.autoExpose) {
-                captureDevice.exposurePointOfInterest = focusPoint
-                captureDevice.exposureMode = .autoExpose
-            }
-            captureDevice.unlockForConfiguration()
-        } catch {
+        try? captureDevice.lockForConfiguration()
+        if captureDevice.isFocusModeSupported(.autoFocus) {
+            captureDevice.focusPointOfInterest = focusPoint
+            captureDevice.focusMode = .autoFocus
         }
-
+        if captureDevice.isExposureModeSupported(.autoExpose) {
+            captureDevice.exposurePointOfInterest = focusPoint
+            captureDevice.exposureMode = .autoExpose
+        }
+        captureDevice.unlockForConfiguration()
         self.focusView.center = point
         self.focusView.isHidden = false
         UIView.animate(withDuration: 0.3, animations: { [weak self] in
