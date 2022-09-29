@@ -11,9 +11,7 @@
 		29A63B41D88FB990CEC2A86B /* Pods_XCrema_XCremaUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1122D371794BB5E419C5BA61 /* Pods_XCrema_XCremaUITests.framework */; };
 		2B72B22B28E1AF3600D4ECF3 /* MovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B72B22A28E1AF3600D4ECF3 /* MovieViewController.swift */; };
 		2BC2ADCC28C1DF09006A0438 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BC2ADCB28C1DF09006A0438 /* AppDelegate.swift */; };
-		2BC2ADCE28C1DF09006A0438 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BC2ADCD28C1DF09006A0438 /* SceneDelegate.swift */; };
 		2BC2ADD028C1DF09006A0438 /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BC2ADCF28C1DF09006A0438 /* PhotoViewController.swift */; };
-		2BC2ADD328C1DF09006A0438 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2BC2ADD128C1DF09006A0438 /* Main.storyboard */; };
 		2BC2ADD528C1DF0A006A0438 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2BC2ADD428C1DF0A006A0438 /* Assets.xcassets */; };
 		2BC2ADD828C1DF0A006A0438 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2BC2ADD628C1DF0A006A0438 /* LaunchScreen.storyboard */; };
 		2BC2ADE328C1DF0A006A0438 /* XCremaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BC2ADE228C1DF0A006A0438 /* XCremaTests.swift */; };
@@ -46,9 +44,7 @@
 		2B72B22A28E1AF3600D4ECF3 /* MovieViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieViewController.swift; sourceTree = "<group>"; };
 		2BC2ADC828C1DF09006A0438 /* XCrema.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XCrema.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2BC2ADCB28C1DF09006A0438 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		2BC2ADCD28C1DF09006A0438 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		2BC2ADCF28C1DF09006A0438 /* PhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewController.swift; sourceTree = "<group>"; };
-		2BC2ADD228C1DF09006A0438 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2BC2ADD428C1DF0A006A0438 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2BC2ADD728C1DF0A006A0438 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2BC2ADD928C1DF0A006A0438 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -129,13 +125,11 @@
 			isa = PBXGroup;
 			children = (
 				2BC2ADCB28C1DF09006A0438 /* AppDelegate.swift */,
-				2BC2ADCD28C1DF09006A0438 /* SceneDelegate.swift */,
 				2BC2ADCF28C1DF09006A0438 /* PhotoViewController.swift */,
 				2B72B22A28E1AF3600D4ECF3 /* MovieViewController.swift */,
-				2BC2ADD128C1DF09006A0438 /* Main.storyboard */,
 				2BC2ADD428C1DF0A006A0438 /* Assets.xcassets */,
-				2BC2ADD628C1DF0A006A0438 /* LaunchScreen.storyboard */,
 				2BC2ADD928C1DF0A006A0438 /* Info.plist */,
+				2BC2ADD628C1DF0A006A0438 /* LaunchScreen.storyboard */,
 			);
 			path = XCrema;
 			sourceTree = "<group>";
@@ -281,7 +275,6 @@
 			files = (
 				2BC2ADD828C1DF0A006A0438 /* LaunchScreen.storyboard in Resources */,
 				2BC2ADD528C1DF0A006A0438 /* Assets.xcassets in Resources */,
-				2BC2ADD328C1DF09006A0438 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -412,7 +405,6 @@
 				2BC2ADD028C1DF09006A0438 /* PhotoViewController.swift in Sources */,
 				2BC2ADCC28C1DF09006A0438 /* AppDelegate.swift in Sources */,
 				2B72B22B28E1AF3600D4ECF3 /* MovieViewController.swift in Sources */,
-				2BC2ADCE28C1DF09006A0438 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -449,14 +441,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		2BC2ADD128C1DF09006A0438 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				2BC2ADD228C1DF09006A0438 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		2BC2ADD628C1DF0A006A0438 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -594,12 +578,13 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = XCrema/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -625,12 +610,13 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = XCrema/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

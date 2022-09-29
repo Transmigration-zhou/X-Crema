@@ -70,6 +70,12 @@ class PhotoViewController: UIViewController {
         return button
     }()
 
+    private let toggleModeButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "video"), for: .normal)
+        return button
+    }()
+
     private let captureButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "capture"), for: .normal)
@@ -121,6 +127,22 @@ class PhotoViewController: UIViewController {
                 self.flashButton.setImage(UIImage(named: "flash_on"), for: .normal)
             }
         }).disposed(by: self.disposeBag)
+
+        headerView.addSubview(toggleModeButton)
+        toggleModeButton.snp.makeConstraints { make in
+            make.width.equalTo(32)
+            make.height.equalTo(32)
+            make.centerY.equalTo(flashButton)
+            make.right.equalToSuperview().offset(-40)
+        }
+        toggleModeButton.rx.tap.subscribe(onNext: { [weak self] () in
+            guard let self = self else { return }
+            let vc = MovieViewController()
+            self.navigationController?.pushViewController(vc, animated: true)
+            if let count = self.navigationController?.viewControllers.count {
+                self.navigationController?.viewControllers.remove(at: count - 2)
+            }
+        }).disposed(by: self.disposeBag)
     }
 
     func setupBottomView() {
@@ -146,7 +168,7 @@ class PhotoViewController: UIViewController {
             self.photoOutput.capturePhoto(with: settings, delegate: self)
         }).disposed(by: self.disposeBag)
 
-        self.bottomView.addSubview(toggleCameraButton)
+        bottomView.addSubview(toggleCameraButton)
         toggleCameraButton.snp.makeConstraints { make in
             make.width.equalTo(30)
             make.height.equalTo(23)

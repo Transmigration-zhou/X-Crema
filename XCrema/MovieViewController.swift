@@ -65,6 +65,12 @@ class MovieViewController: UIViewController {
         return button
     }()
 
+    private let toggleModeButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "camera"), for: .normal)
+        return button
+    }()
+
     private let recordButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "record_start"), for: .normal)
@@ -82,7 +88,7 @@ class MovieViewController: UIViewController {
         self.startCamera()
         self.setupHeaderView()
         self.setupBottomView()
-//        self.addTapGesture()
+        self.addTapGesture()
     }
 
     func setupHeaderView() {
@@ -114,6 +120,22 @@ class MovieViewController: UIViewController {
                 videoDevice.torchMode = .on
             }
             videoDevice.unlockForConfiguration()
+        }).disposed(by: self.disposeBag)
+
+        headerView.addSubview(toggleModeButton)
+        toggleModeButton.snp.makeConstraints { make in
+            make.width.equalTo(32)
+            make.height.equalTo(32)
+            make.centerY.equalTo(flashButton)
+            make.right.equalToSuperview().offset(-40)
+        }
+        toggleModeButton.rx.tap.subscribe(onNext: { [weak self] () in
+            guard let self = self else { return }
+            let vc = PhotoViewController()
+            self.navigationController?.pushViewController(vc, animated: true)
+            if let count = self.navigationController?.viewControllers.count {
+                self.navigationController?.viewControllers.remove(at: count - 2)
+            }
         }).disposed(by: self.disposeBag)
     }
 
