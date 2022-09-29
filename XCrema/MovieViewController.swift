@@ -37,7 +37,11 @@ class MovieViewController: UIViewController {
     var effectiveScale: CGFloat = 1.0
 
     var outputURL: URL?
-    
+
+    // 计时器
+    var seconds = 0
+    var timer = Timer()
+
     private let headerView: UIView = {
         let view = UIView()
         view.backgroundColor = .black.withAlphaComponent(0.4)
@@ -75,6 +79,14 @@ class MovieViewController: UIViewController {
         let button = UIButton()
         button.setImage(UIImage(named: "record_start"), for: .normal)
         return button
+    }()
+
+    private let timeLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor.white
+        label.font = UIFont.systemFont(ofSize: 20)
+        label.textAlignment = .center
+        return label
     }()
 
     override var shouldAutorotate: Bool {
@@ -137,6 +149,13 @@ class MovieViewController: UIViewController {
                 self.navigationController?.viewControllers.remove(at: count - 2)
             }
         }).disposed(by: self.disposeBag)
+
+        timeLabel.text = timeString(time: TimeInterval(seconds))
+        headerView.addSubview(timeLabel)
+        timeLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalTo(flashButton)
+        }
     }
 
     func setupBottomView() {
@@ -160,6 +179,9 @@ class MovieViewController: UIViewController {
                 self.isRecording = false
                 self.recordButton.setImage(UIImage(named: "record_start"), for: .normal)
                 self.flashButton.isHidden = false
+                self.timer.invalidate()
+                self.seconds = 0
+                self.timeLabel.text = self.timeString(time: TimeInterval(self.seconds))
             } else {
                 // 设置目录的保存地址
                 let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
@@ -172,8 +194,25 @@ class MovieViewController: UIViewController {
                 self.isRecording = true
                 self.recordButton.setImage(UIImage(named: "record_stop"), for: .normal)
                 self.flashButton.isHidden = true
+                self.runTimer()
             }
         }).disposed(by: self.disposeBag)
+    }
+
+    @objc func updateTimer() {
+        seconds += 1
+        timeLabel.text = timeString(time: TimeInterval(seconds))
+    }
+
+    func runTimer() {
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: (#selector(MovieViewController.updateTimer)), userInfo: nil, repeats: true)
+    }
+
+    func timeString(time: TimeInterval) -> String {
+        let hours = Int(time) / 3600
+        let minutes = Int(time) / 60 % 60
+        let seconds = Int(time) % 60
+        return String(format:"%02i:%02i:%02i", hours, minutes, seconds)
     }
 }
 
