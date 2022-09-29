@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		05704045908E71C93BC8300C /* Pods_XCremaTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9553295F8897D3E3C191CBCB /* Pods_XCremaTests.framework */; };
 		29A63B41D88FB990CEC2A86B /* Pods_XCrema_XCremaUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1122D371794BB5E419C5BA61 /* Pods_XCrema_XCremaUITests.framework */; };
+		2B72B22B28E1AF3600D4ECF3 /* MovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B72B22A28E1AF3600D4ECF3 /* MovieViewController.swift */; };
 		2BC2ADCC28C1DF09006A0438 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BC2ADCB28C1DF09006A0438 /* AppDelegate.swift */; };
 		2BC2ADCE28C1DF09006A0438 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BC2ADCD28C1DF09006A0438 /* SceneDelegate.swift */; };
 		2BC2ADD028C1DF09006A0438 /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BC2ADCF28C1DF09006A0438 /* PhotoViewController.swift */; };
@@ -42,6 +43,7 @@
 		1122D371794BB5E419C5BA61 /* Pods_XCrema_XCremaUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_XCrema_XCremaUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C80A6B26360D7498682D8DE /* Pods_XCrema.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_XCrema.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D05FD4A5AA29FA505BE5A5B /* Pods-XCremaTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XCremaTests.release.xcconfig"; path = "Target Support Files/Pods-XCremaTests/Pods-XCremaTests.release.xcconfig"; sourceTree = "<group>"; };
+		2B72B22A28E1AF3600D4ECF3 /* MovieViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieViewController.swift; sourceTree = "<group>"; };
 		2BC2ADC828C1DF09006A0438 /* XCrema.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XCrema.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2BC2ADCB28C1DF09006A0438 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2BC2ADCD28C1DF09006A0438 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 				2BC2ADCB28C1DF09006A0438 /* AppDelegate.swift */,
 				2BC2ADCD28C1DF09006A0438 /* SceneDelegate.swift */,
 				2BC2ADCF28C1DF09006A0438 /* PhotoViewController.swift */,
+				2B72B22A28E1AF3600D4ECF3 /* MovieViewController.swift */,
 				2BC2ADD128C1DF09006A0438 /* Main.storyboard */,
 				2BC2ADD428C1DF0A006A0438 /* Assets.xcassets */,
 				2BC2ADD628C1DF0A006A0438 /* LaunchScreen.storyboard */,
@@ -408,6 +411,7 @@
 			files = (
 				2BC2ADD028C1DF09006A0438 /* PhotoViewController.swift in Sources */,
 				2BC2ADCC28C1DF09006A0438 /* AppDelegate.swift in Sources */,
+				2B72B22B28E1AF3600D4ECF3 /* MovieViewController.swift in Sources */,
 				2BC2ADCE28C1DF09006A0438 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
