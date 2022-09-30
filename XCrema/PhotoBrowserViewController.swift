@@ -28,7 +28,7 @@ class PhotoBrowserViewController: UIViewController {
     }
 
     func setupUI() {
-        let bgView = UIScrollView.init(frame: self.view.bounds)
+        let bgView = UIScrollView(frame: self.view.bounds)
         bgView.backgroundColor = .black
         bgView.addSubview(self.imageView)
         self.view.addSubview(bgView)
