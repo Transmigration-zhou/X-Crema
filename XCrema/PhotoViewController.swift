@@ -11,6 +11,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 import Photos
+import PhotosUI
 
 class PhotoViewController: UIViewController {
 
@@ -85,6 +86,12 @@ class PhotoViewController: UIViewController {
     private let toggleCameraButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "toggleCamera"), for: .normal)
+        return button
+    }()
+
+    private let previewButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "preview"), for: .normal)
         return button
     }()
 
@@ -203,6 +210,21 @@ class PhotoViewController: UIViewController {
             let connection = self.photoOutput.connection(with: .video)
             connection?.videoScaleAndCropFactor = self.effectiveScale
             self.previewLayer?.setAffineTransform(CGAffineTransform(scaleX: self.effectiveScale, y: self.effectiveScale))
+        }).disposed(by: self.disposeBag)
+
+        bottomView.addSubview(previewButton)
+        previewButton.snp.makeConstraints { make in
+            make.width.height.equalTo(26)
+            make.centerY.equalTo(captureButton)
+            make.left.equalToSuperview().offset(60)
+        }
+        previewButton.rx.tap.subscribe(onNext: { [weak self] () in
+            guard let self = self else { return }
+            var config = PHPickerConfiguration()
+            config.filter = .images
+            let picker = PHPickerViewController(configuration: config)
+            picker.delegate = self
+            self.navigationController?.pushViewController(picker, animated: true)
         }).disposed(by: self.disposeBag)
     }
 }
@@ -331,5 +353,30 @@ extension PhotoViewController: UIGestureRecognizerDelegate {
             self.beginGestureScale = self.effectiveScale
         }
         return true
+    }
+}
+
+extension PhotoViewController: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        if results.isEmpty {
+            self.navigationController?.popViewController(animated: true)
+            return
+        }
+        for result in results {
+            result.itemProvider.loadObject(ofClass: UIImage.self) { (object, error) in
+                if let error = error {
+                    print("picker error: \(error)")
+                } else {
+                    if let image = object as? UIImage {
+                        DispatchQueue.main.async {
+                            // Use UIImage
+                            print("Selected image: \(image)")
+                            let preview = PhotoBrowserViewController(image: image)
+                            self.navigationController?.pushViewController(preview, animated: true)
+                        }
+                    }
+                }
+            }
+       }
     }
 }

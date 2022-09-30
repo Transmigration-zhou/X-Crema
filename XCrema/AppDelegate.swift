@@ -19,7 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let mainVC = UINavigationController(rootViewController: vc)
         mainVC.navigationBar.isHidden = true
         self.window?.rootViewController = mainVC
-        self.window?.backgroundColor = .white
         self.window?.makeKeyAndVisible()
         return true
     }
