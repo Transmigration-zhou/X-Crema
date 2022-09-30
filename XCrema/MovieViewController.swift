@@ -11,6 +11,8 @@ import SnapKit
 import RxSwift
 import RxCocoa
 import Photos
+import PhotosUI
+import AVKit
 
 class MovieViewController: UIViewController {
 
@@ -78,6 +80,12 @@ class MovieViewController: UIViewController {
     private let recordButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "record_start"), for: .normal)
+        return button
+    }()
+
+    private let previewButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "preview"), for: .normal)
         return button
     }()
 
@@ -186,7 +194,8 @@ class MovieViewController: UIViewController {
                 // 设置目录的保存地址
                 let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
                 let documentDict: String = paths[0]
-                let filePath = "\(documentDict)/movie.mov"
+                let filename = String(describing: Date()).replacingOccurrences(of: " ", with: "_")
+                let filePath = "\(documentDict)/\(filename).mov"
                 let fileUrl = URL(fileURLWithPath: filePath)
                 self.outputURL = fileUrl
                 print("outputURL: \(self.outputURL!)")
@@ -196,6 +205,21 @@ class MovieViewController: UIViewController {
                 self.flashButton.isHidden = true
                 self.runTimer()
             }
+        }).disposed(by: self.disposeBag)
+
+        bottomView.addSubview(previewButton)
+        previewButton.snp.makeConstraints { make in
+            make.width.height.equalTo(26)
+            make.centerY.equalTo(recordButton)
+            make.left.equalToSuperview().offset(60)
+        }
+        previewButton.rx.tap.subscribe(onNext: { [weak self] () in
+            guard let self = self else { return }
+            var config = PHPickerConfiguration()
+            config.filter = .videos
+            let picker = PHPickerViewController(configuration: config)
+            picker.delegate = self
+            self.navigationController?.pushViewController(picker, animated: true)
         }).disposed(by: self.disposeBag)
     }
 
@@ -292,5 +316,36 @@ extension MovieViewController: AVCaptureFileOutputRecordingDelegate {
         try? PHPhotoLibrary.shared().performChangesAndWait {
             PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: outputFileURL)
         }
+    }
+}
+
+extension MovieViewController: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        if results.isEmpty {
+            self.navigationController?.popViewController(animated: true)
+            return
+        }
+        for result in results {
+            result.itemProvider.loadFileRepresentation(forTypeIdentifier: UTType.movie.identifier) { (url, error) in
+                if let error = error {
+                    print("picker error: \(error)")
+                } else {
+                    if let url = url {
+                        print(url)
+                        DispatchQueue.main.async {
+                            let fileName = url.relativeString.components(separatedBy: "/").last ?? ""
+                            let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+                            let documentDict: String = paths[0]
+                            let filePath = "\(documentDict)/\(fileName)"
+                            let fileUrl = URL(fileURLWithPath: filePath)
+                            print("Selected url: \(fileUrl)")
+                            let playerViewController = AVPlayerViewController()
+                            playerViewController.player = AVPlayer(url: fileUrl)
+                            self.present(playerViewController, animated: true)
+                        }
+                    }
+                }
+            }
+       }
     }
 }
